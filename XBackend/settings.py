@@ -25,7 +25,7 @@ SECRET_KEY = '!o)-^)0t5!6b84%8k9!sot&t#=a%(8wh&&t1r*ciutsql^d4lh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'interface',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'XBackend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'xprojectDB',
+        'USER': 'perison',
+        'PASSWORD': '123!@#',
+        'HOST': 'localhost',
+        'PORT': '6667',
     }
 }
 
