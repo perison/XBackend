@@ -19,5 +19,6 @@ from interface import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^hello/$',views.show)
+    url(r'^hello/$',views.show),
+    url(r'^addWager/$',views.addWager),
 ]
