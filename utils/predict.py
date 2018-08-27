@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 import tensorflow as tf
 from tensorflow.contrib import seq2seq
 import seaborn as sns
@@ -80,7 +81,7 @@ def main():
         #     cost = build_loss(logits, targets, vocab_size)
 
         # We use the cosine distance:
-        norm = tf.sqrt(tf.reduce_sum(tf.square(embed_matrix), 1, keep_dims=True))
+        norm = tf.sqrt(tf.reduce_sum(tf.square(embed_matrix), 1, keepdims=True))
         normalized_embedding = embed_matrix / norm
 
         probs_embeddings = tf.nn.embedding_lookup(normalized_embedding,
@@ -122,7 +123,6 @@ def main():
     floating_median_acc_range_k = 0
     floating_median_acc_range_k_list = []
 
-    floating_median_sim_idx = 0
     floating_median_sim_acc_range_k = 0
     floating_median_sim_acc_range_k_list = []
 
@@ -587,3 +587,6 @@ def load_params():
     Load parameters from file
     """
     return pickle.load(open('params.p', mode='rb'))
+
+if __name__ == "__main__":
+    main()
