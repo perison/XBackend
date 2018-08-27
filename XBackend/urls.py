@@ -19,7 +19,8 @@ from interface import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^hello/$',views.show),
+    url(r'^getWagerList/$',views.getWagerList),
     url(r'^addWager/$',views.addWager),
     url(r'^updateWager/$', views.updateWager),
+    url(r'^deleteWager/$', views.deleteWager),
 ]
