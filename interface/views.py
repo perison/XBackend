@@ -14,10 +14,28 @@ def show(request):
 @csrf_exempt
 def addWager(request):
     if request.method == 'POST' :
-        # return HttpResponse('request:'+request.POST.get('wager',''));
-        print 'wager:'+request.POST.get('wager','')
         w = Wagers(wager=request.POST.get('wager',''),wid=request.POST.get('wid',''))
         w.save()
-        return HttpResponse('OK');
+        return HttpResponse('addWager OK');
     else :
-        return HttpResponse('GET done');
+        return HttpResponse('GET mothod will do nothing');
+
+def updateWager(request):
+    if request.method == 'POST' :
+        wid = request.POST.get('wid','')
+        wager = request.POST.get('wager','')
+        w = Wagers.objects.get(wid=wid)
+        w.wager = wager
+        w.save(update_fields=['wager'])
+        return HttpResponse('updateWager OK');
+    else :
+        return HttpResponse('GET mothod will do nothing');
+
+def deleteWager(request):
+    if request.method == 'POST' :
+        wid = request.POST.get('wid','')
+        w = Wagers.objects.get(wid=wid)
+        w.delete()
+        return HttpResponse('deleteWager OK');
+    else :
+        return HttpResponse('GET mothod will do nothing');

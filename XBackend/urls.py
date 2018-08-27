@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^hello/$',views.show),
     url(r'^addWager/$',views.addWager),
+    url(r'^updateWager/$', views.updateWager),
 ]
