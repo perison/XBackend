@@ -1,0 +1,78 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta content="width=device-width; initial-scale=1.0; user-scalable=0; maximum-scale=1; minimum-scale=1.0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="blank" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="email=no; telephone=no" />
+	<title>搜索</title>
+	</head>
+	<style type="text/css">
+		body, div, form, input, img, p {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			font: 14px/1.231 Verdana, Arial, Helvetica, sans-serif;
+			color: #333333;
+            text-align:center;
+            width:100%;
+            background:url(static/new/bg2.png);
+		}
+		a {
+			text-decoration: none;
+		}
+		.nav{
+		    margin:0 auto;
+		    height:18px;
+		   /* background-color:#ae1a14;*/
+		}
+		.main{
+			margin:0 auto;
+			text-align: center;
+            height:135px;
+            background-size: cover;
+		}
+		.center{
+			padding-top: 0;
+			margin:0 auto;
+            width:320px;
+            text-align: center;
+		}
+        .logo{
+
+           height:42px;
+           width:80px;
+           margin:0 auto;
+           margin-bottom: 12px;
+
+        }
+        /*.hua{width:213px;height:256px;position: absolute;left:0px;top:115px;background:url(static/new/hua.png);}*/
+        /* .foot{height:152px;background:url(static/new/luo.png);*/
+         position: absolute;
+         width: 100%;
+         left:0px;
+         bottom: 0px;}
+        .form{height:40px;}
+        .btn{height:33px;width:89px;color:#fff;font-size:15px;float:right;background:url(static/new/btn.png);border:none;font-weight: bold;
+                                                                                                                         text-indent: 15px;}
+        .text{height:30px;width:225px;float:left;border: 2px solid #ac1913;line-height:30px;}
+
+	</style>
+	<body onload="MyForm.code.focus()">
+	<div class='nav'>
+    </div>
+    <div class="hua"></div>
+	<div class='main'>
+		<div class='center'>
+            <div class="logo"></div>
+			<form  method="post" defaultbutton="submit_bt" name="MyForm" class='form'>
+				<input type="password"  width="200" height="25" value=""  id="code" name="code" class='text'>
+				<input type="submit"  value="搜索" name="submit_bt" class='btn'>
+			</form>
+		</div>
+	</div>
+	<div class="foot"></div>
+	</body>
+	</html>
