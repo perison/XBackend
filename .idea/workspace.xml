@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f8bd824c-5a8f-46b9-9f29-5f1f4244cf54" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/data/cp.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/data/val.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -203,22 +204,13 @@
               <item name="XBackend" type="b2602c69:ProjectViewProjectNode" />
               <item name="XBackend" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
-              <item name="tutorial" type="462c0819:PsiDirectoryNode" />
+              <item name="mechanize" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="XBackend" type="b2602c69:ProjectViewProjectNode" />
               <item name="XBackend" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
-              <item name="tutorial" type="462c0819:PsiDirectoryNode" />
-              <item name="tutorial" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="XBackend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="XBackend" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-              <item name="tutorial" type="462c0819:PsiDirectoryNode" />
-              <item name="tutorial" type="462c0819:PsiDirectoryNode" />
-              <item name="spiders" type="462c0819:PsiDirectoryNode" />
+              <item name="predict" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -351,7 +343,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="207" y="69" width="1405" height="1000" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49917898" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" sideWeight="0.500821" side_tool="true" weight="0.25" />
