@@ -1,6 +1,10 @@
 # -*- coding:utf-8 -*-
 from urlparse import urlparse
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+import json,time
+from collections import OrderedDict
 import requests
 import re,random
 import sys
@@ -25,15 +29,29 @@ def compare():
     # # 关闭文件
     # fo.close()
     
-    file = open("test.html", "r")
-    lines = file.readlines()
-    html = ''.join(lines)
-    # print html
+    headers = {'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
+               'Upgrade-Insecure-Requests': '1',
+               'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',
+               # 'javascriptEnabled': True,
+               'Accept-Encoding': 'gzip, deflate',
+               'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+               # 'platform': 'ANY',
+               # 'browserName': 'phantomjs',
+               # 'version': '',
+               # 'Host': u'pc4.1ll11.com',
+               'Cookie': 'SafeCode=activated;AC=86467c19f776574db849b8cea55c5ca8|1535889010;PHPSESSID=747a5d52ef_1040020_6706',
+               'Referer': u'http://pc4.1ll11.com/sscgp53745f/user/login.html.auth'
+               }
     
-    soup = BeautifulSoup(html,features="html5lib")
-    s =  soup.find("input",{"name":"cname"})
-    print s.attrs['value']
-    
+    pt = PhantomJs(headers)
+    pt.browse('https://www.bejson.com/')
+    print ('page_source1',pt.instance().page_source)
+    print (type(pt.instance().page_source))
+    submit_button = pt.instance().find_element_by_id('validate')
+    submit_button.send_keys('abcd')
+    print ('page_source2',pt.instance().page_source)
+
+    pt.quite()
 
 def choose_link(cookie_box, links) :
     print 'choose_link'
@@ -44,24 +62,38 @@ def choose_link(cookie_box, links) :
                 return link
     return '' #找不到合适的就返回空字符串
 
+class PhantomJs(object):
+    def __init__(self,headers):
+        for key, value in headers.iteritems() :
+            capability_key = 'phantomjs.page.customHeaders.{}'.format(key)
+            webdriver.DesiredCapabilities.PHANTOMJS[capability_key] = value
+        dcap = dict(DesiredCapabilities.PHANTOMJS)
+        print 'dcap', dcap
+        self.__browser = webdriver.PhantomJS(desired_capabilities=dcap)
+        
+    def instance(self):
+        return self.__browser
+    
+    def getResponseHeaders(self) :
+        har = json.loads(self.__browser.get_log('har')[0]['message'])
+        return OrderedDict(
+            sorted([(header["name"], header["value"]) for header in har['log']['entries'][0]['response']["headers"]],
+                   key=lambda x : x[0]))
+
+    def getResponseStatus(self) :
+        har = json.loads(self.__browser.get_log('har')[0]['message'])
+        return (har['log']['entries'][0]['response']["status"],str(har['log']['entries'][0]['response']["statusText"]))
+
+    def browse(self,url):
+        print ('browse url',url)
+        self.__browser.get(url)
+        # print ('page_source', self.__browser.page_source)
+    
+    def quite(self):
+        self.__browser.quit()
+
 
 class Action(object) :
-    # KEY = '8pj39'
-    # USER = 'poiu0099'
-    # PASSWORD = 'As14258@'
-    # URL = 'http://acf1.qr68.us/'
-    # # URL = 'http://httpbin.org/get'
-    # SUBMIT_BT = u'搜索'
-    # headers = {
-    # 	'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',
-    # 	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    # 	'Accept-Encoding': 'gzip, deflate',
-    # 	'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
-    # 	'Connection': 'keep-alive',
-    # 	'Upgrade-Insecure-Requests': '1',
-    # 	'Content-Type': 'application/x-www-form-urlencoded'}  # 设置请求的信息头
-    # session = requests.session()  # 获取会话对象
-    
     def __init__(self, user, password) :
         self.user = user
         self.password = password
@@ -185,7 +217,7 @@ class Action(object) :
         self.url = login_page.url
         self.text = login_page.text
         print ('login_page.text', login_page.text)
-        # write_html(login_page.text)
+        write_html(login_page.text)
         login_page_cookies = login_page.cookies.get_dict()
         print ('login_page_cookies', login_page_cookies)
         
@@ -215,7 +247,9 @@ class Action(object) :
         temp_headers['Accept'] = 'image/webp,image/apng,image/*,*/*;q=0.8'
         img = requests.get('http://' + host + '/getVcode/.auth?t=' + getVcode_t + '&systemversion=' + self.systemversion + '&.auth',headers=temp_headers)
         if img.status_code == 200 :
-            open('verifycode.jpeg', 'wb').write(img.content)
+            file = open('./trainImage/verifycode_'+str(random.randint(0,10000))+'.jpeg', 'wb')
+            file.write(img.content)
+            file.close()
         else :
             return 1
         return 0
@@ -225,8 +259,9 @@ class Action(object) :
             'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',
             'Accept' : '*/*',
             'Accept-Encoding' : 'gzip, deflate',
-            'Accept-Language' : 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
-            'Content-Type' : 'application/x-www-form-urlencoded'}
+            'Accept-Language' : 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7'
+            # 'Content-Type' : 'application/x-www-form-urlencoded'
+        }
         host = urlparse(self.url).hostname
         self.headers['Host'] = host
         self.headers['Referer'] = self.url
@@ -239,6 +274,10 @@ class Action(object) :
         cid = s.attrs['value']
         
         self.verify_code = raw_input('input verify_code:')
+        
+        self.go_with_phantomjs(self.headers,self.url)
+        return 1
+        
         form_data = {'isSec' : '0', 'cid' : cid, 'cname' : cname, 'systemversion' : self.systemversion,
                      'VerifyCode' : self.verify_code, '__VerifyValue' : self.verify_value, 'password' : self.password,
                      '__name' : self.user}
@@ -264,17 +303,71 @@ class Action(object) :
         redirect_url = redirect_info.text.split('\n')[1].replace('host',host) #替换类似http://host/sscgp53745f/login/632bea9f9a_rdsess/k中的host
         print 'redirect_url',redirect_url
         
-        print 'shit6 headers',self.headers
-        redirect_page = requests.get(redirect_url, headers = self.headers, allow_redirects=False)
-        print 'redirect_page.status_code',redirect_page.status_code  # 302
-        print 'redirect_page.url',redirect_page.url
-        # print 'redirect_page.text',redirect_page.headers['Location']
+        #http://pc4.1ll11.com/sscgp53745f_6706/index.htm?20902_20903_4.6.trunk_20150316
+        target_url = 'http://' + host + redirect_info.text.split('\n')[0] + 'index.htm?20902_20903_4.6.trunk_20150316'
+        print 'target_url',target_url
+        
+        print 'last headers',self.headers
+
+        pt = PhantomJs(self.headers)
+        pt.browse(redirect_url)
+        # pt.browse('http://httpbin.org/get')
+        print pt.getResponseStatus()
+        print pt.getResponseHeaders()
+
+        pt.browse(target_url)
+        # pt.browse('http://httpbin.org/get')
+        print pt.getResponseStatus()
+        print pt.getResponseHeaders()
+
+        pt.quite()
+        
+        
+        # redirect_page = self.session.get(redirect_url, headers = self.headers,allow_redirects=False)
+        # print 'redirect_page.status_code',redirect_page.status_code  # 302
+        # print 'redirect_page.url',redirect_page.url
+        # print 'redirect_page.text',redirect_page.text
+        # print redirect_page.headers
 
         # if last_page.status_code == 200 and last_page.text.find('赛车') != -1 :
         #     return 0
         
         return 1
+    
+    def get_with_requests(self,headers):
+        pass
+    
+    def post_with_requests(self,headers,data):
+        pass
+    
+    def go_with_phantomjs(self,headers,url):
+        pt = PhantomJs(headers)
+        pt.browse(url)
+        print ('page_source',(pt.instance().page_source))
+        # print pt.getResponseStatus()
+        print ('response headers',pt.getResponseHeaders())
         
+        time.sleep(10)
+        username_input = pt.instance().find_element_by_name('__name')
+        password_input = pt.instance().find_element_by_name('password')
+        verifycode_input = pt.instance().find_element_by_name('VerifyCode')
+        checked_input = pt.instance().find_element_by_id('sec')
+        submit_button = pt.instance().find_element_by_name('submit')
+        
+        username_input.send_keys(self.user)
+        password_input.send_keys(self.password)
+        verifycode_input.send_keys(self.verify_code)
+        checked_input.click()
+        submit_button.click()
+        
+        time.sleep(3)
+        
+        print ('page after submit',pt.instance().page_source)
+        print ('cookies after submit',pt.instance().get_cookies())
+    
+        pt.quite()
+        
+
 def combine():
     user = 'ee222222'
     password = 'Po2......'
@@ -300,5 +393,5 @@ def combine():
         print 'shit1'
 
 if __name__ == "__main__" :
-    # compare()
-    combine()
+    compare()
+    # combine()
